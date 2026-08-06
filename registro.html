@@ -1,307 +1,464 @@
 <!DOCTYPE html>
-
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Registro de alertas - PIXQUI</title>
 
-<style>
-body{
-    font-family: Arial, sans-serif;
-    margin:0;
-    background:#eef8ee;
-    color:#333;
-}
-
-header{
-    background:#3b8c5a;
-    color:white;
-    text-align:center;
-    padding:20px;
-}
-
-header h1{
-    margin:0;
-}
-
-.contenedor{
-    width:85%;
-    margin:30px auto;
-}
-
-.contador{
-    background:#3b8c5a;
-    color:white;
-    width:300px;
-    margin:20px auto;
-    text-align:center;
-    padding:20px;
-    border-radius:20px;
-    box-shadow:0 4px 10px gray;
-}
-
-.contador h2{
-    font-size:45px;
-    margin:10px 0;
-}
-
-.formulario{
-    background:white;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 4px 10px gray;
-    margin-bottom:30px;
-}
-
-.formulario h2{
-    color:#25633d;
-    margin-top:0;
-}
-
-.formulario input,
-.formulario textarea{
-    width:100%;
-    padding:12px;
-    margin:10px 0;
-    border-radius:8px;
-    border:1px solid #aaa;
-    box-sizing:border-box;
-    font-size:15px;
-}
-
-.formulario textarea{
-    height:80px;
-}
-
-.formulario button{
-    background:#3b8c5a;
-    color:white;
-    border:none;
-    padding:12px 25px;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:16px;
-}
-
-.formulario button:hover{
-    background:#25633d;
-}
-
-.lista{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:20px;
-    margin-top:20px;
-}
-
-.alerta{
-    background:#d8f3dc;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 4px 8px gray;
-}
-
-.alerta h3{
-    margin-top:0;
-    color:#25633d;
-}
-
-.alerta p{
-    margin:8px 0;
-}
-
-.alerta button{
-    background:#c0392b;
-    color:white;
-    border:none;
-    padding:8px 15px;
-    border-radius:6px;
-    cursor:pointer;
-    margin-top:10px;
-}
-
-.alerta button:hover{
-    background:#962d22;
-}
-
-.vacio{
-    text-align:center;
-    color:#666;
-    font-style:italic;
-    margin-top:20px;
-}
-
-.botones{
-    text-align:center;
-    margin-top:30px;
-}
-
-.botones a{
-    display:inline-block;
-    margin:10px;
-    padding:12px 25px;
-    background:#3b8c5a;
-    color:white;
-    text-decoration:none;
-    border-radius:8px;
-}
-
-.botones a:hover{
-    background:#25633d;
-}
-</style>
+<script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 
-<body>
 
-<header>
-    <h1>Registro de alertas</h1>
-</header>
 
-<div class="contenedor">
+<body class="bg-[#F6EFD9]">
 
-```
-<div class="contador">
-    <p>Alertas este mes</p>
-    <h2 id="contador">0</h2>
-    <p>eventos registrados</p>
-</div>
 
-<div class="formulario">
-    <h2>Nueva alerta</h2>
 
-    <input type="text" id="nombre" placeholder="Nombre del niño">
+<!-- NAVBAR -->
 
-    <input type="date" id="fecha">
+<nav class="bg-[#F6EFD9] border-b border-[#E8DDB8]">
 
-    <input type="time" id="hora">
+<div class="max-w-6xl mx-auto px-5 py-4 flex flex-col md:flex-row justify-between items-center gap-5">
 
-    <textarea id="observacion" placeholder="Observación"></textarea>
 
-    <button onclick="guardarAlerta()">Guardar alerta</button>
-</div>
+<div class="flex items-center gap-3">
 
-<h2>Historial de alertas</h2>
+<img src="./imagenes/Logo.jpg"
+class="w-14 h-14 rounded-full object-cover">
 
-<div id="listaAlertas" class="lista"></div>
 
-<p id="mensajeVacio" class="vacio">No hay alertas registradas.</p>
-
-<div class="botones">
-    <a href="panel.html">⬅ Regresar al panel</a>
-</div>
-```
+<h1 class="text-3xl font-bold">
+PIXQUI
+</h1>
 
 </div>
+
+
+
+<div class="flex flex-wrap justify-center gap-5 font-medium">
+
+
+<a href="index.html" class="hover:text-[#8EC5FC]">
+Inicio
+</a>
+
+
+<a href="nosotros.html" class="hover:text-[#8EC5FC]">
+Nosotros
+</a>
+
+
+<a href="producto.html" class="hover:text-[#8EC5FC]">
+Producto
+</a>
+
+
+<a href="registro.html" class="text-[#26758c]">
+Registro
+</a>
+
+
+<a href="contacto.html" class="hover:text-[#8EC5FC]">
+Contacto
+</a>
+
+
+</div>
+
+
+</div>
+
+</nav>
+
+
+
+
+
+
+
+<section class="max-w-6xl mx-auto px-6 py-12">
+
+
+
+
+
+<h1 class="text-4xl font-bold text-center text-[#26758c] mb-10">
+
+Registro de alertas
+
+</h1>
+
+
+
+
+
+
+<!-- CONTADOR -->
+
+<div class="bg-[#26758c] text-white rounded-3xl shadow-lg p-6 max-w-xs mx-auto text-center">
+
+
+<p>
+Alertas este mes
+</p>
+
+
+<h2 id="contador" class="text-5xl font-bold my-3">
+0
+</h2>
+
+
+<p>
+eventos registrados
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+
+<!-- FORMULARIO -->
+
+
+<div class="bg-white rounded-2xl shadow-lg p-8 mt-10">
+
+
+<h2 class="text-2xl font-bold text-[#26758c] mb-5">
+
+Nueva alerta
+
+</h2>
+
+
+
+
+<input id="nombre"
+type="text"
+placeholder="Nombre del niño"
+class="w-full p-3 mb-4 border rounded-lg">
+
+
+
+<input id="fecha"
+type="date"
+class="w-full p-3 mb-4 border rounded-lg">
+
+
+
+<input id="hora"
+type="time"
+class="w-full p-3 mb-4 border rounded-lg">
+
+
+
+<textarea id="observacion"
+placeholder="Observación"
+class="w-full p-3 mb-4 border rounded-lg h-24"></textarea>
+
+
+
+
+<button onclick="guardarAlerta()"
+
+class="bg-[#26758c] text-white px-7 py-3 rounded-full hover:bg-[#155263]">
+
+Guardar alerta
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+<h2 class="text-3xl font-bold text-[#26758c] mt-12 mb-6">
+
+Historial de alertas
+
+</h2>
+
+
+
+
+<div id="listaAlertas"
+class="grid md:grid-cols-3 gap-6">
+
+</div>
+
+
+
+<p id="mensajeVacio"
+class="text-center text-gray-600 italic mt-5">
+
+No hay alertas registradas.
+
+</p>
+
+
+
+
+
+<div class="text-center mt-10">
+
+
+<a href="panel.html"
+
+class="bg-[#26758c] text-white px-7 py-3 rounded-full">
+
+⬅ Regresar al panel
+
+</a>
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
 
 <script>
-// Verificar que haya sesión iniciada
+
+
 const madre = localStorage.getItem('madre');
 
+
 if(!madre){
-    window.location.href = 'login.html';
+
+window.location.href='login.html';
+
 }
 
-// Cada madre tiene su propia lista de alertas
+
+
 const claveAlertas = 'alertas_' + madre;
 
-// Mostrar alertas al abrir la página
+
+
 mostrarAlertas();
+
+
+
 
 function guardarAlerta(){
 
-    const nombre = document.getElementById('nombre').value.trim();
-    const fecha = document.getElementById('fecha').value;
-    const hora = document.getElementById('hora').value;
-    const observacion = document.getElementById('observacion').value.trim();
 
-    if(nombre === '' || fecha === '' || hora === ''){
-        alert('Completa nombre, fecha y hora.');
-        return;
-    }
+const nombre=document.getElementById('nombre').value.trim();
 
-    const alerta = {
-        nombre,
-        fecha,
-        hora,
-        observacion
-    };
+const fecha=document.getElementById('fecha').value;
 
-    let alertas = JSON.parse(localStorage.getItem(claveAlertas)) || [];
-    alertas.push(alerta);
+const hora=document.getElementById('hora').value;
 
-    localStorage.setItem(claveAlertas, JSON.stringify(alertas));
+const observacion=document.getElementById('observacion').value.trim();
 
-    document.getElementById('nombre').value = '';
-    document.getElementById('fecha').value = '';
-    document.getElementById('hora').value = '';
-    document.getElementById('observacion').value = '';
 
-    mostrarAlertas();
+
+if(nombre==='' || fecha==='' || hora===''){
+
+alert('Completa nombre, fecha y hora.');
+
+return;
+
 }
+
+
+
+const alerta={
+
+nombre,
+
+fecha,
+
+hora,
+
+observacion
+
+};
+
+
+
+let alertas=JSON.parse(localStorage.getItem(claveAlertas)) || [];
+
+alertas.push(alerta);
+
+
+
+localStorage.setItem(claveAlertas,JSON.stringify(alertas));
+
+
+
+document.getElementById('nombre').value='';
+
+document.getElementById('fecha').value='';
+
+document.getElementById('hora').value='';
+
+document.getElementById('observacion').value='';
+
+
+
+mostrarAlertas();
+
+
+}
+
 
 function mostrarAlertas(){
 
-    const lista = document.getElementById('listaAlertas');
-    const mensaje = document.getElementById('mensajeVacio');
 
-    let alertas = JSON.parse(localStorage.getItem(claveAlertas)) || [];
+const lista=document.getElementById('listaAlertas');
 
-    lista.innerHTML = '';
+const mensaje=document.getElementById('mensajeVacio');
 
-    const hoy = new Date();
-    const mesActual = hoy.getMonth() + 1;
-    const anioActual = hoy.getFullYear();
 
-    let contadorMensual = 0;
+let alertas=JSON.parse(localStorage.getItem(claveAlertas)) || [];
 
-    if(alertas.length === 0){
-        mensaje.style.display = 'block';
-    }else{
-        mensaje.style.display = 'none';
-    }
 
-    alertas.forEach((alerta, index) => {
+lista.innerHTML='';
 
-        const partes = alerta.fecha.split('-');
-        const anio = parseInt(partes[0]);
-        const mes = parseInt(partes[1]);
 
-        if(mes === mesActual && anio === anioActual){
-            contadorMensual++;
-        }
+let contadorMensual=0;
 
-        const tarjeta = document.createElement('div');
-        tarjeta.className = 'alerta';
 
-        tarjeta.innerHTML = `
-            <h3>${alerta.fecha}</h3>
-            <p><strong>Niño:</strong> ${alerta.nombre}</p>
-            <p><strong>Hora:</strong> ${alerta.hora}</p>
-            <p>${alerta.observacion}</p>
-            <button onclick="eliminarAlerta(${index})">Eliminar</button>
-        `;
+const hoy=new Date();
 
-        lista.appendChild(tarjeta);
+const mesActual=hoy.getMonth()+1;
 
-    });
+const anioActual=hoy.getFullYear();
 
-    document.getElementById('contador').textContent = contadorMensual;
+
+
+
+if(alertas.length===0){
+
+mensaje.style.display='block';
+
+}else{
+
+mensaje.style.display='none';
+
 }
+
+
+alertas.forEach((alerta,index)=>{
+
+
+const partes=alerta.fecha.split('-');
+
+const anio=parseInt(partes[0]);
+
+const mes=parseInt(partes[1]);
+
+
+
+if(mes===mesActual && anio===anioActual){
+
+contadorMensual++;
+
+}
+
+
+
+const tarjeta=document.createElement('div');
+
+
+tarjeta.className="bg-[#bfe8f5] rounded-2xl shadow-lg p-5";
+
+
+tarjeta.innerHTML=`
+
+<h3 class="text-xl font-bold text-[#155263]">
+
+${alerta.fecha}
+
+</h3>
+
+
+<p><strong>Niño:</strong> ${alerta.nombre}</p>
+
+<p><strong>Hora:</strong> ${alerta.hora}</p>
+
+<p>${alerta.observacion}</p>
+
+
+<button onclick="eliminarAlerta(${index})"
+
+class="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg">
+
+Eliminar
+
+</button>
+
+`;
+
+
+
+lista.appendChild(tarjeta);
+
+
+
+});
+
+
+
+document.getElementById('contador').textContent=contadorMensual;
+
+
+
+}
+
+
+
+
+
+
 
 function eliminarAlerta(index){
 
-    if(confirm('¿Deseas eliminar esta alerta?')){
-        let alertas = JSON.parse(localStorage.getItem(claveAlertas)) || [];
-        alertas.splice(index,1);
-        localStorage.setItem(claveAlertas, JSON.stringify(alertas));
-        mostrarAlertas();
-    }
+
+if(confirm('¿Deseas eliminar esta alerta?')){
+
+
+let alertas=JSON.parse(localStorage.getItem(claveAlertas)) || [];
+
+
+alertas.splice(index,1);
+
+
+localStorage.setItem(claveAlertas,JSON.stringify(alertas));
+
+
+mostrarAlertas();
+
+
 }
+
+
+}
+
+
 </script>
 
+
 </body>
+
 </html>
 
