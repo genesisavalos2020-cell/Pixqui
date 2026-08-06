@@ -1,177 +1,296 @@
 <!DOCTYPE html>
-
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Panel PIXQUI</title>
 
-<style>
-body{
-    font-family: Arial, sans-serif;
-    margin:0;
-    background:#eef8ee;
-    color:#333;
-}
-
-header{
-    background:#3b8c5a;
-    color:white;
-    padding:20px;
-    text-align:center;
-}
-
-header h1{
-    margin:0;
-}
-
-.contenedor{
-    width:80%;
-    margin:30px auto;
-}
-
-.bienvenida{
-    background:white;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 4px 10px gray;
-    text-align:center;
-}
-
-.tarjetas{
-    display:flex;
-    justify-content:center;
-    gap:25px;
-    margin-top:30px;
-    flex-wrap:wrap;
-}
-
-.tarjeta{
-    background:#d8f3dc;
-    width:250px;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 4px 8px gray;
-    text-align:center;
-}
-
-.tarjeta h2{
-    color:#25633d;
-    margin-top:0;
-}
-
-.tarjeta h1{
-    font-size:40px;
-    color:#1b5e20;
-}
-
-.botones{
-    text-align:center;
-    margin-top:40px;
-}
-
-a{
-    display:inline-block;
-    margin:10px;
-    padding:12px 25px;
-    background:#3b8c5a;
-    color:white;
-    text-decoration:none;
-    border-radius:8px;
-}
-
-a:hover{
-    background:#25633d;
-}
-</style>
+<script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 
-<body>
 
-<header>
-    <h1>Panel de control PIXQUI</h1>
-</header>
+<body class="bg-[#F6EFD9]">
 
-<div class="contenedor">
 
-```
-<div class="bienvenida">
-    <h2 id="saludo"></h2>
-    <p>Este es tu panel privado de seguimiento.</p>
-</div>
 
-<div class="tarjetas">
+<!-- NAVBAR -->
 
-    <div class="tarjeta">
-        <h2>Niño registrado</h2>
-        <p id="nombreNino"></p>
-    </div>
+<nav class="bg-[#F6EFD9] border-b border-[#E8DDB8]">
 
-    <div class="tarjeta">
-        <h2>Alertas este mes</h2>
-        <h1 id="contador">0</h1>
-    </div>
 
-    <div class="tarjeta">
-        <h2>Estado</h2>
-        <p>Monitoreo activo</p>
-    </div>
+<div class="max-w-6xl mx-auto px-5 py-4 flex justify-between items-center">
+
+
+<div class="flex items-center gap-3">
+
+
+<img src="./imagenes/Logo.jpg"
+alt="Logo PIXQUI"
+class="w-14 h-14 rounded-full object-cover">
+
+
+<h1 class="text-3xl font-bold">
+PIXQUI
+</h1>
+
 
 </div>
 
-<div class="botones">
-    <a href="registro.html">Ver registro de alertas</a>
-    <a href="index.html" id="cerrarSesion">Cerrar sesión</a>
-</div>
-```
 
 </div>
+
+
+</nav>
+
+
+
+<section class="max-w-6xl mx-auto px-6 py-12">
+
+
+
+
+<h1 class="text-4xl font-bold text-center text-[#26758c] mb-10">
+
+Panel de control PIXQUI
+
+</h1>
+
+
+
+
+<!-- BIENVENIDA -->
+
+<div class="bg-white rounded-2xl shadow-lg p-8 text-center">
+
+
+<h2 id="saludo"
+class="text-3xl font-bold text-[#26758c]">
+
+</h2>
+
+
+<p class="text-gray-700 mt-3">
+
+Este es tu panel privado de seguimiento.
+
+</p>
+
+
+</div>
+
+
+
+
+<!-- TARJETAS -->
+
+<div class="grid md:grid-cols-3 gap-8 mt-10">
+
+
+
+<div class="bg-[#bfe8f5] rounded-2xl shadow-lg p-6 text-center">
+
+
+<h2 class="text-xl font-bold text-[#155263]">
+
+Niño registrado
+
+</h2>
+
+
+<p id="nombreNino"
+class="mt-4 text-lg">
+
+</p>
+
+
+</div>
+
+
+
+
+<div class="bg-[#bfe8f5] rounded-2xl shadow-lg p-6 text-center">
+
+
+<h2 class="text-xl font-bold text-[#155263]">
+
+Alertas este mes
+
+</h2>
+
+
+<h1 id="contador"
+class="text-5xl font-bold text-[#26758c] mt-3">
+
+0
+
+</h1>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="bg-[#bfe8f5] rounded-2xl shadow-lg p-6 text-center">
+
+
+<h2 class="text-xl font-bold text-[#155263]">
+
+Estado
+
+</h2>
+
+
+<p class="mt-4">
+
+🟢 Monitoreo activo
+
+</p>
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div class="text-center mt-12">
+
+
+<a href="registro.html"
+
+class="bg-[#26758c] text-white px-7 py-3 rounded-full hover:bg-[#155263]">
+
+Ver registro de alertas
+
+</a>
+
+
+
+
+
+<button onclick="cerrarSesion()"
+
+class="bg-red-500 text-white px-7 py-3 rounded-full ml-3 hover:bg-red-600">
+
+Cerrar sesión
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
 
 <script>
-// Obtener datos del usuario
+
+
 const madre = localStorage.getItem('madre');
+
 const nino = localStorage.getItem('nino');
 
-// Si no ha iniciado sesión, regresar al login
+
+
+
 if(!madre || !nino){
-    window.location.href = 'login.html';
+
+window.location.href="login.html";
+
 }
 
-// Mostrar datos del usuario
-document.getElementById('saludo').textContent = 'Bienvenida, ' + madre + ' 👋';
-document.getElementById('nombreNino').textContent = nino;
 
-// Cada madre tiene sus propias alertas
-const claveAlertas = 'alertas_' + madre;
-const alertas = JSON.parse(localStorage.getItem(claveAlertas)) || [];
+document.getElementById('saludo').textContent =
+"Bienvenida, " + madre + " 👋";
 
-// Contador del mes actual
-const hoy = new Date();
-const mesActual = hoy.getMonth() + 1;
-const anioActual = hoy.getFullYear();
 
-let contadorMensual = 0;
 
-alertas.forEach(alerta => {
-    const partes = alerta.fecha.split('-');
-    const anio = parseInt(partes[0]);
-    const mes = parseInt(partes[1]);
+document.getElementById('nombreNino').textContent=nino;
 
-    if(mes === mesActual && anio === anioActual){
-        contadorMensual++;
-    }
+
+
+const claveAlertas="alertas_"+madre;
+
+
+const alertas =
+JSON.parse(localStorage.getItem(claveAlertas)) || [];
+
+
+
+
+const hoy=new Date();
+
+const mesActual=hoy.getMonth()+1;
+
+const anioActual=hoy.getFullYear();
+
+
+
+let contadorMensual=0;
+
+
+
+
+alertas.forEach(alerta=>{
+
+
+const partes=alerta.fecha.split('-');
+
+
+const anio=parseInt(partes[0]);
+
+const mes=parseInt(partes[1]);
+
+
+
+if(mes===mesActual && anio===anioActual){
+
+contadorMensual++;
+
+}
+
+
 });
 
-document.getElementById('contador').textContent = contadorMensual;
 
-// Cerrar sesión
-document.getElementById('cerrarSesion').addEventListener('click', function(){
-    localStorage.removeItem('madre');
-    localStorage.removeItem('nino');
-});
+document.getElementById('contador').textContent=contadorMensual;
+
+function cerrarSesion(){
+
+localStorage.removeItem('madre');
+
+localStorage.removeItem('nino');
+
+
+window.location.href="index.html";
+
+
+}
+
 </script>
 
-</body>
-</html>
 
+</body>
+
+</html>
