@@ -1,243 +1,198 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
 
-    <title>Sobre Nosotros</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
+<title>Sobre Nosotros - PIXQUI</title>
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #f7f3ee;
-            color: #333;
-        }
-
-
-        header {
-            background-color: #26758c;
-            padding: 20px;
-            text-align: center;
-            color: white;
-        }
-
-
-        header h1 {
-            margin: 0;
-            font-size: 32px;
-        }
-
-
-        .contenido {
-            padding: 40px;
-            text-align: center;
-        }
-
-
-        /* Cuadro principal blanco */
-
-        .tarjeta-principal {
-
-            background-color: white;
-            width: 70%;
-            margin: auto;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0px 4px 10px gray;
-
-        }
-
-
-
-        .tarjeta-principal h2 {
-
-            margin-top: 0;
-
-        }
-
-
-
-        .tarjeta-principal p {
-
-            font-size: 16px;
-
-        }
-
-
-
-        /* Tarjetas de mision vision objetivo */
-
-
-        .tarjetas {
-
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-top: 40px;
-
-        }
-
-
-
-        .tarjeta {
-
-            background-color: #bfe8f5;
-            width: 230px;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0px 4px 8px gray;
-            text-align: center;
-
-        }
-
-
-
-        .tarjeta h2 {
-
-            margin-top: 0;
-
-        }
-
-
-
-        .tarjeta p {
-
-            font-size: 15px;
-            line-height: 1.5;
-
-        }
-
-
-
-        .tarjeta:hover {
-
-            transform: translateY(-8px);
-
-        }
-
-
-
-        /* Boton */
-
-        a {
-
-            display: inline-block;
-            margin-top: 35px;
-            padding: 12px 25px;
-            background-color: #26758c;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-
-        }
-
-
-
-        a:hover {
-
-            background-color: #155263;
-
-        }
-
-
-    </style>
+<script src="https://cdn.tailwindcss.com"></script>
 
 </head>
 
+<body class="bg-[#F6EFD9]">
 
 
-<body>
+<!-- NAVBAR -->
+
+<nav class="bg-[#F6EFD9] border-b border-[#E8DDB8]">
+
+<div class="max-w-6xl mx-auto px-5 py-4 flex flex-col md:flex-row justify-between items-center gap-5">
 
 
-<header>
+<div class="flex items-center gap-3">
 
-    <h1>Sobre Nosotros</h1>
-
-</header>
-
-
-
-<div class="contenido">
+<img src="./imagenes/Logo.jpg"
+alt="Logo PIXQUI"
+class="w-14 h-14 rounded-full object-cover">
 
 
+<h1 class="text-3xl font-bold text-[#1F1F1F]">
+PIXQUI
+</h1>
 
-    <div class="tarjeta-principal">
-
-
-        <h2>¿Quiénes somos?</h2>
-
-
-        <p>
-        Somos un proyecto dedicado a crear soluciones tecnológicas 
-        innovadoras que buscan ayudar y facilitar la vida de las personas.
-        </p>
-
-
-    </div>
+</div>
 
 
 
 
-    <div class="tarjetas">
+<div class="flex flex-wrap justify-center gap-5 text-[#1F1F1F] font-medium">
+
+
+<a href="index.html" class="hover:text-[#8EC5FC]">
+Inicio
+</a>
+
+
+<a href="nosotros.html" class="text-[#26758c]">
+Nosotros
+</a>
+
+
+<a href="producto.html" class="hover:text-[#8EC5FC]">
+Producto
+</a>
+
+
+<a href="registro.html" class="hover:text-[#8EC5FC]">
+Registro
+</a>
+
+
+<a href="contacto.html" class="hover:text-[#8EC5FC]">
+Contacto
+</a>
+
+
+</div>
+
+
+</div>
+
+</nav>
+
+
+<!-- CONTENIDO -->
+
+<section class="max-w-6xl mx-auto px-6 py-16 text-center">
+
+<!-- TARJETA PRINCIPAL -->
+
+<div class="bg-white rounded-2xl shadow-lg p-8 max-w-4xl mx-auto">
+
+
+<h2 class="text-3xl font-bold text-[#26758c] mb-4">
+
+¿Quiénes somos?
+
+</h2>
 
 
 
-        <div class="tarjeta">
-
-            <h2>Misión</h2>
-
-            <p>
-            Crear productos tecnológicos innovadores que ayuden a las 
-            personas y mejoren su calidad de vida mediante soluciones 
-            prácticas y accesibles.
-            </p>
-
-        </div>
+<p class="text-gray-700 text-lg leading-relaxed">
 
 
+Somos un proyecto dedicado a crear soluciones tecnológicas innovadoras que buscan ayudar y facilitar la vida de las personas.
 
 
-
-        <div class="tarjeta">
-
-            <h2>Visión</h2>
-
-            <p>
-            Ser un proyecto reconocido por desarrollar tecnología 
-            creativa, útil y confiable que genere un impacto positivo.
-            </p>
-
-        </div>
-
-
-
-
-
-        <div class="tarjeta">
-
-            <h2>Objetivo</h2>
-
-            <p>
-            Diseñar y desarrollar soluciones que combinen tecnología 
-            y creatividad para resolver necesidades reales.
-            </p>
-
-        </div>
-
-
-
-    </div>
-
-
-
-
-    <a href="index.html">Volver al inicio</a>
+</p>
 
 
 
 </div>
 
+
+
+
+
+<!-- TARJETAS -->
+
+<div class="grid md:grid-cols-3 gap-8 mt-12">
+
+
+
+<div class="bg-[#bfe8f5] rounded-2xl shadow-lg p-6 hover:-translate-y-2 transition">
+
+
+<h2 class="text-2xl font-bold text-[#26758c] mb-4">
+
+Misión
+
+</h2>
+
+
+<p class="text-gray-700 leading-relaxed">
+
+
+Crear productos tecnológicos innovadores que ayuden a las personas y mejoren su calidad de vida mediante soluciones prácticas y accesibles.
+
+
+</p>
+
+
+</div>
+
+
+<div class="bg-[#bfe8f5] rounded-2xl shadow-lg p-6 hover:-translate-y-2 transition">
+
+
+<h2 class="text-2xl font-bold text-[#26758c] mb-4">
+
+Visión
+
+</h2>
+
+
+<p class="text-gray-700 leading-relaxed">
+
+
+Ser un proyecto reconocido por desarrollar tecnología creativa, útil y confiable que genere un impacto positivo.
+
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+<div class="bg-[#bfe8f5] rounded-2xl shadow-lg p-6 hover:-translate-y-2 transition">
+
+
+<h2 class="text-2xl font-bold text-[#26758c] mb-4">
+
+Objetivo
+
+</h2>
+
+
+<p class="text-gray-700 leading-relaxed">
+
+
+Diseñar y desarrollar soluciones que combinen tecnología y creatividad para resolver necesidades reales.
+
+
+</p>
+
+</div>
+
+</div>
+
+
+<a href="index.html"
+
+class="inline-block mt-12 bg-[#26758c] text-white px-7 py-3 rounded-full hover:bg-[#155263] transition">
+
+Volver al inicio
+
+</a>
+
+</section>
 
 
 </body>
