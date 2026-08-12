@@ -1,5 +1,4 @@
-
-           <!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="es">
 
@@ -275,10 +274,12 @@ class="boton-inicio"
 import { auth, db }
 from "./js/firebase-config.js";
 
+
 import {
     onAuthStateChanged
 }
 from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
 
 import {
     collection,
@@ -294,65 +295,31 @@ let usuarioActual = null;
 let rutaAlertas = null;
 
 
-/*
-    COMPROBAR SESIÓN
-
-    Primero esperamos a que Firebase termine
-    de comprobar la sesión.
-*/
+/* =========================
+   COMPROBAR SESIÓN
+========================= */
 
 onAuthStateChanged(auth, async (usuario) => {
 
-    if (usuario) {
+    if (!usuario) {
 
-        console.log("✅ Usuario detectado por Firebase:", usuario.uid);
-
-        usuarioActual = usuario.uid;
-
-        rutaAlertas = collection(
-            db,
-            "usuarios",
-            usuarioActual,
-            "alertas"
-        );
-
-        await mostrarAlertas();
-
-        return;
-    }
-
-
-    /*
-        Si Firebase todavía no encuentra al usuario,
-        revisamos el UID que guardamos al iniciar sesión.
-    */
-
-    const uidGuardado = localStorage.getItem("usuario");
-
-
-    if (!uidGuardado) {
-
-        console.log("❌ No existe usuario guardado.");
+        console.log("No hay sesión activa.");
 
         window.location.href = "login.html";
 
         return;
+
     }
 
 
     console.log(
-        "⚠️ Firebase no detectó usuario inmediatamente.",
-        "UID guardado:",
-        uidGuardado
+        "Usuario conectado:",
+        usuario.uid
     );
 
 
-    /*
-        Usamos el UID guardado para acceder
-        a las alertas del usuario.
-    */
+    usuarioActual = usuario.uid;
 
-    usuarioActual = uidGuardado;
 
     rutaAlertas = collection(
         db,
@@ -367,9 +334,9 @@ onAuthStateChanged(auth, async (usuario) => {
 });
 
 
-/*
-    GUARDAR ALERTA
-*/
+/* =========================
+   GUARDAR ALERTA
+========================= */
 
 window.guardarAlerta = async function(){
 
@@ -461,6 +428,7 @@ window.guardarAlerta = async function(){
             error
         );
 
+
         alert(
             "No se pudo guardar la alerta. Revisa la conexión con Firebase."
         );
@@ -470,9 +438,9 @@ window.guardarAlerta = async function(){
 };
 
 
-/*
-    MOSTRAR ALERTAS
-*/
+/* =========================
+   MOSTRAR ALERTAS
+========================= */
 
 async function mostrarAlertas(){
 
@@ -595,6 +563,7 @@ async function mostrarAlertas(){
             "contador"
         ).textContent = contador;
 
+
     }
 
     catch(error){
@@ -617,9 +586,9 @@ async function mostrarAlertas(){
 }
 
 
-/*
-    ELIMINAR ALERTA
-*/
+/* =========================
+   ELIMINAR ALERTA
+========================= */
 
 window.eliminarAlerta = async function(id){
 
@@ -643,6 +612,7 @@ window.eliminarAlerta = async function(id){
 
 
             await mostrarAlertas();
+
 
         }
 
