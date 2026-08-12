@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+           <!DOCTYPE html>
 
 <html lang="es">
 
@@ -175,63 +176,59 @@ header h1{
 
 <header>
 
-```
 <h1>Registro de alertas</h1>
-```
 
 </header>
 
 <div class="contenedor">
 
-```
 <!-- CONTADOR -->
 
 <div class="contador">
 
-    <p>Alertas este mes</p>
+<p>Alertas este mes</p>
 
-    <h2 id="contador">0</h2>
+<h2 id="contador">0</h2>
 
-    <p>eventos registrados</p>
+<p>eventos registrados</p>
 
 </div>
-
-
 
 <!-- FORMULARIO -->
 
 <div class="formulario">
 
-    <h2>Nueva alerta</h2>
+<h2>Nueva alerta</h2>
 
-    <input
-        type="text"
-        id="nombre"
-        placeholder="Nombre del niño"
-    >
+<input
+type="text"
+id="nombre"
+placeholder="Nombre del niño"
 
-    <input
-        type="date"
-        id="fecha"
-    >
+>
 
-    <input
-        type="time"
-        id="hora"
-    >
+<input
+type="date"
+id="fecha"
 
-    <textarea
-        id="observacion"
-        placeholder="Observación"
-    ></textarea>
+>
 
-    <button onclick="guardarAlerta()">
-        Guardar alerta
-    </button>
+<input
+type="time"
+id="hora"
+
+>
+
+<textarea
+    id="observacion"
+    placeholder="Observación"
+></textarea>
+
+<button onclick="guardarAlerta()">
+    Guardar alerta
+</button>
 
 </div>
-
-
 
 <!-- HISTORIAL -->
 
@@ -249,40 +246,39 @@ header h1{
     No hay alertas registradas.
 </p>
 
-
-
 <!-- BOTONES -->
 
 <div class="botones">
 
-    <a href="panel.html">
-        ⬅ Regresar al panel
-    </a>
+<a href="panel.html">
+    ⬅ Regresar al panel
+</a>
 
-    <a
-        href="index.html"
-        class="boton-inicio"
-    >
-        🏠 Ir al inicio
-    </a>
+<a
+href="index.html"
+class="boton-inicio"
+
+>
+
+```
+🏠 Ir al inicio
+```
+
+</a>
 
 </div>
-```
 
 </div>
 
 <script type="module">
 
-
 import { auth, db }
 from "./js/firebase-config.js";
-
 
 import {
     onAuthStateChanged
 }
 from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-
 
 import {
     collection,
@@ -294,42 +290,69 @@ import {
 from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 
-
 let usuarioActual = null;
-
 let rutaAlertas = null;
-
 
 
 /*
     COMPROBAR SESIÓN
 
-    Esperamos a que Firebase termine de comprobar
-    si existe un usuario conectado.
+    Primero esperamos a que Firebase termine
+    de comprobar la sesión.
 */
 
 onAuthStateChanged(auth, async (usuario) => {
 
+    if (usuario) {
 
-    if (!usuario) {
+        console.log("✅ Usuario detectado por Firebase:", usuario.uid);
 
-        console.log("No hay usuario de Firebase conectado.");
+        usuarioActual = usuario.uid;
+
+        rutaAlertas = collection(
+            db,
+            "usuarios",
+            usuarioActual,
+            "alertas"
+        );
+
+        await mostrarAlertas();
+
+        return;
+    }
+
+
+    /*
+        Si Firebase todavía no encuentra al usuario,
+        revisamos el UID que guardamos al iniciar sesión.
+    */
+
+    const uidGuardado = localStorage.getItem("usuario");
+
+
+    if (!uidGuardado) {
+
+        console.log("❌ No existe usuario guardado.");
 
         window.location.href = "login.html";
 
         return;
-
     }
 
 
     console.log(
-        "Usuario conectado:",
-        usuario.uid
+        "⚠️ Firebase no detectó usuario inmediatamente.",
+        "UID guardado:",
+        uidGuardado
     );
 
 
-    usuarioActual = usuario.uid;
+    /*
+        Usamos el UID guardado para acceder
+        a las alertas del usuario.
+    */
 
+    usuarioActual = uidGuardado;
 
     rutaAlertas = collection(
         db,
@@ -341,9 +364,7 @@ onAuthStateChanged(auth, async (usuario) => {
 
     await mostrarAlertas();
 
-
 });
-
 
 
 /*
@@ -352,10 +373,11 @@ onAuthStateChanged(auth, async (usuario) => {
 
 window.guardarAlerta = async function(){
 
-
     if (!rutaAlertas) {
 
-        alert("Espera un momento mientras se conecta la cuenta.");
+        alert(
+            "Espera un momento mientras se conecta la cuenta."
+        );
 
         return;
 
@@ -378,7 +400,6 @@ window.guardarAlerta = async function(){
         document.getElementById("observacion").value.trim();
 
 
-
     if (
         nombre === "" ||
         fecha === "" ||
@@ -394,9 +415,7 @@ window.guardarAlerta = async function(){
     }
 
 
-
     try {
-
 
         await addDoc(
             rutaAlertas,
@@ -451,13 +470,11 @@ window.guardarAlerta = async function(){
 };
 
 
-
 /*
     MOSTRAR ALERTAS
 */
 
 async function mostrarAlertas(){
-
 
     if (!rutaAlertas) {
 
@@ -483,7 +500,6 @@ async function mostrarAlertas(){
 
     try {
 
-
         const datos =
             await getDocs(
                 rutaAlertas
@@ -491,7 +507,6 @@ async function mostrarAlertas(){
 
 
         if (datos.empty) {
-
 
             mensaje.style.display =
                 "block";
@@ -514,10 +529,8 @@ async function mostrarAlertas(){
         let contador = 0;
 
 
-
         datos.forEach(
             (elemento) => {
-
 
                 const alerta =
                     elemento.data();
@@ -574,7 +587,6 @@ async function mostrarAlertas(){
                     tarjeta
                 );
 
-
             }
         );
 
@@ -583,11 +595,9 @@ async function mostrarAlertas(){
             "contador"
         ).textContent = contador;
 
-
     }
 
     catch(error){
-
 
         console.error(
             "Error al cargar alertas:",
@@ -607,13 +617,11 @@ async function mostrarAlertas(){
 }
 
 
-
 /*
     ELIMINAR ALERTA
 */
 
 window.eliminarAlerta = async function(id){
-
 
     if (
         confirm(
@@ -621,9 +629,7 @@ window.eliminarAlerta = async function(id){
         )
     ){
 
-
         try {
-
 
             await deleteDoc(
                 doc(
@@ -638,11 +644,9 @@ window.eliminarAlerta = async function(id){
 
             await mostrarAlertas();
 
-
         }
 
         catch(error){
-
 
             console.error(
                 "Error al eliminar:",
@@ -660,10 +664,8 @@ window.eliminarAlerta = async function(id){
 
 };
 
-
 </script>
 
 </body>
 
 </html>
-
