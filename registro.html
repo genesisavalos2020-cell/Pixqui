@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Registro de alertas - PIXQUI</title>
 
 <style>
+
 body{
     font-family: Arial, sans-serif;
     margin:0;
@@ -27,6 +31,7 @@ header h1{
 
 .contenedor{
     width:85%;
+    max-width:1000px;
     margin:30px auto;
 }
 
@@ -34,6 +39,7 @@ header h1{
     background:#3b8c5a;
     color:white;
     width:300px;
+    max-width:90%;
     margin:20px auto;
     text-align:center;
     padding:20px;
@@ -72,6 +78,7 @@ header h1{
 
 .formulario textarea{
     height:80px;
+    resize:vertical;
 }
 
 .formulario button{
@@ -135,11 +142,12 @@ header h1{
 .botones{
     text-align:center;
     margin-top:30px;
+    padding-bottom:30px;
 }
 
 .botones a{
     display:inline-block;
-    margin:10px;
+    margin:8px;
     padding:12px 25px;
     background:#3b8c5a;
     color:white;
@@ -150,6 +158,15 @@ header h1{
 .botones a:hover{
     background:#25633d;
 }
+
+.boton-inicio{
+    background:#26758c !important;
+}
+
+.boton-inicio:hover{
+    background:#155263 !important;
+}
+
 </style>
 
 </head>
@@ -157,40 +174,98 @@ header h1{
 <body>
 
 <header>
-    <h1>Registro de alertas</h1>
+
+```
+<h1>Registro de alertas</h1>
+```
+
 </header>
 
 <div class="contenedor">
 
 ```
+<!-- CONTADOR -->
+
 <div class="contador">
+
     <p>Alertas este mes</p>
+
     <h2 id="contador">0</h2>
+
     <p>eventos registrados</p>
+
 </div>
+
+
+
+<!-- FORMULARIO -->
 
 <div class="formulario">
+
     <h2>Nueva alerta</h2>
 
-    <input type="text" id="nombre" placeholder="Nombre del niño">
+    <input
+        type="text"
+        id="nombre"
+        placeholder="Nombre del niño"
+    >
 
-    <input type="date" id="fecha">
+    <input
+        type="date"
+        id="fecha"
+    >
 
-    <input type="time" id="hora">
+    <input
+        type="time"
+        id="hora"
+    >
 
-    <textarea id="observacion" placeholder="Observación"></textarea>
+    <textarea
+        id="observacion"
+        placeholder="Observación"
+    ></textarea>
 
-    <button onclick="guardarAlerta()">Guardar alerta</button>
+    <button onclick="guardarAlerta()">
+        Guardar alerta
+    </button>
+
 </div>
+
+
+
+<!-- HISTORIAL -->
 
 <h2>Historial de alertas</h2>
 
-<div id="listaAlertas" class="lista"></div>
+<div
+    id="listaAlertas"
+    class="lista"
+></div>
 
-<p id="mensajeVacio" class="vacio">No hay alertas registradas.</p>
+<p
+    id="mensajeVacio"
+    class="vacio"
+>
+    No hay alertas registradas.
+</p>
+
+
+
+<!-- BOTONES -->
 
 <div class="botones">
-    <a href="panel.html">⬅ Regresar al panel</a>
+
+    <a href="panel.html">
+        ⬅ Regresar al panel
+    </a>
+
+    <a
+        href="index.html"
+        class="boton-inicio"
+    >
+        🏠 Ir al inicio
+    </a>
+
 </div>
 ```
 
@@ -198,21 +273,23 @@ header h1{
 
 <script type="module">
 
-import { auth, db } from "./js/firebase-config.js";
+
+import { auth, db }
+from "./js/firebase-config.js";
 
 
 import {
-onAuthStateChanged
+    onAuthStateChanged
 }
 from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
 
 import {
-collection,
-addDoc,
-getDocs,
-deleteDoc,
-doc
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc,
+    doc
 }
 from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
@@ -224,234 +301,369 @@ let rutaAlertas = null;
 
 
 
-onAuthStateChanged(auth, (usuario)=>{
+/*
+    COMPROBAR SESIÓN
+
+    Esperamos a que Firebase termine de comprobar
+    si existe un usuario conectado.
+*/
+
+onAuthStateChanged(auth, async (usuario) => {
 
 
-if(!usuario){
+    if (!usuario) {
 
-window.location.href="login.html";
+        console.log("No hay usuario de Firebase conectado.");
 
-return;
+        window.location.href = "login.html";
 
-}
+        return;
 
-
-
-usuarioActual = usuario.uid;
+    }
 
 
-rutaAlertas = collection(
-db,
-"usuarios",
-usuarioActual,
-"alertas"
-);
+    console.log(
+        "Usuario conectado:",
+        usuario.uid
+    );
 
 
-mostrarAlertas();
+    usuarioActual = usuario.uid;
+
+
+    rutaAlertas = collection(
+        db,
+        "usuarios",
+        usuarioActual,
+        "alertas"
+    );
+
+
+    await mostrarAlertas();
 
 
 });
 
+
+
+/*
+    GUARDAR ALERTA
+*/
 
 window.guardarAlerta = async function(){
 
 
-const nombre =
-document.getElementById("nombre").value.trim();
+    if (!rutaAlertas) {
+
+        alert("Espera un momento mientras se conecta la cuenta.");
+
+        return;
+
+    }
 
 
-const fecha =
-document.getElementById("fecha").value;
+    const nombre =
+        document.getElementById("nombre").value.trim();
 
 
-const hora =
-document.getElementById("hora").value;
+    const fecha =
+        document.getElementById("fecha").value;
 
 
-const observacion =
-document.getElementById("observacion").value.trim();
+    const hora =
+        document.getElementById("hora").value;
 
 
-
-
-if(nombre==="" || fecha==="" || hora===""){
-
-
-alert("Completa nombre, fecha y hora.");
-
-return;
-
-
-}
+    const observacion =
+        document.getElementById("observacion").value.trim();
 
 
 
-await addDoc(
-rutaAlertas,
-{
+    if (
+        nombre === "" ||
+        fecha === "" ||
+        hora === ""
+    ){
 
+        alert(
+            "Completa nombre, fecha y hora."
+        );
 
-nombre:nombre,
-fecha:fecha,
-hora:hora,
-observacion:observacion,
-distancia:"Pendiente"
+        return;
 
-
-}
-
-);
-
-
-
-alert("Alerta registrada correctamente");
+    }
 
 
 
-document.getElementById("nombre").value="";
-document.getElementById("fecha").value="";
-document.getElementById("hora").value="";
-document.getElementById("observacion").value="";
+    try {
+
+
+        await addDoc(
+            rutaAlertas,
+            {
+
+                nombre: nombre,
+
+                fecha: fecha,
+
+                hora: hora,
+
+                observacion: observacion,
+
+                distancia: "Pendiente"
+
+            }
+        );
+
+
+        alert(
+            "Alerta registrada correctamente."
+        );
+
+
+        document.getElementById("nombre").value = "";
+
+        document.getElementById("fecha").value = "";
+
+        document.getElementById("hora").value = "";
+
+        document.getElementById("observacion").value = "";
+
+
+        await mostrarAlertas();
+
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Error al guardar alerta:",
+            error
+        );
+
+        alert(
+            "No se pudo guardar la alerta. Revisa la conexión con Firebase."
+        );
+
+    }
+
+};
 
 
 
-mostrarAlertas();
-
-
-
-}
-
-
+/*
+    MOSTRAR ALERTAS
+*/
 
 async function mostrarAlertas(){
 
 
-const lista =
-document.getElementById("listaAlertas");
+    if (!rutaAlertas) {
+
+        return;
+
+    }
 
 
-const mensaje =
-document.getElementById("mensajeVacio");
+    const lista =
+        document.getElementById(
+            "listaAlertas"
+        );
+
+
+    const mensaje =
+        document.getElementById(
+            "mensajeVacio"
+        );
+
+
+    lista.innerHTML = "";
+
+
+    try {
+
+
+        const datos =
+            await getDocs(
+                rutaAlertas
+            );
+
+
+        if (datos.empty) {
+
+
+            mensaje.style.display =
+                "block";
+
+
+            document.getElementById(
+                "contador"
+            ).textContent = "0";
+
+
+            return;
+
+        }
+
+
+        mensaje.style.display =
+            "none";
+
+
+        let contador = 0;
 
 
 
-lista.innerHTML="";
+        datos.forEach(
+            (elemento) => {
 
 
-
-const datos =
-await getDocs(rutaAlertas);
-
+                const alerta =
+                    elemento.data();
 
 
-if(datos.empty){
-
-mensaje.style.display="block";
-
-document.getElementById("contador").textContent=0;
-
-return;
+                contador++;
 
 
-}else{
+                const tarjeta =
+                    document.createElement(
+                        "div"
+                    );
 
 
-mensaje.style.display="none";
+                tarjeta.className =
+                    "alerta";
 
+
+                tarjeta.innerHTML = `
+
+                    <h3>
+                        ${alerta.fecha}
+                    </h3>
+
+                    <p>
+                        <strong>Niño:</strong>
+                        ${alerta.nombre}
+                    </p>
+
+                    <p>
+                        <strong>Hora:</strong>
+                        ${alerta.hora}
+                    </p>
+
+                    <p>
+                        ${alerta.observacion || ""}
+                    </p>
+
+                    <p>
+                        <strong>Distancia:</strong>
+                        ${alerta.distancia || "Pendiente"}
+                    </p>
+
+                    <button
+                        onclick="eliminarAlerta('${elemento.id}')"
+                    >
+                        Eliminar
+                    </button>
+
+                `;
+
+
+                lista.appendChild(
+                    tarjeta
+                );
+
+
+            }
+        );
+
+
+        document.getElementById(
+            "contador"
+        ).textContent = contador;
+
+
+    }
+
+    catch(error){
+
+
+        console.error(
+            "Error al cargar alertas:",
+            error
+        );
+
+
+        mensaje.textContent =
+            "No se pudieron cargar las alertas.";
+
+
+        mensaje.style.display =
+            "block";
+
+    }
 
 }
 
 
 
-let contador=0;
-
-
-
-datos.forEach((elemento)=>{
-
-
-const alerta=elemento.data();
-
-
-
-contador++;
-
-
-
-const tarjeta=document.createElement("div");
-
-
-tarjeta.className="alerta";
-
-
-
-tarjeta.innerHTML=`
-
-<h3>${alerta.fecha}</h3>
-
-<p><strong>Niño:</strong> ${alerta.nombre}</p>
-
-<p><strong>Hora:</strong> ${alerta.hora}</p>
-
-<p>${alerta.observacion}</p>
-
-<p><strong>Distancia:</strong> ${alerta.distancia}</p>
-
-
-<button onclick="eliminarAlerta('${elemento.id}')">
-
-Eliminar
-
-</button>
-
-`;
-
-
-
-lista.appendChild(tarjeta);
-
-
-
-});
-
-
-
-document.getElementById("contador").textContent=contador;
-
-
-
-}
-
-
+/*
+    ELIMINAR ALERTA
+*/
 
 window.eliminarAlerta = async function(id){
 
 
-
-if(confirm("¿Deseas eliminar esta alerta?")){
-
-
-await deleteDoc(
-doc(db,"usuarios",usuarioActual,"alertas",id)
-);
+    if (
+        confirm(
+            "¿Deseas eliminar esta alerta?"
+        )
+    ){
 
 
-
-mostrarAlertas();
-
+        try {
 
 
-}
+            await deleteDoc(
+                doc(
+                    db,
+                    "usuarios",
+                    usuarioActual,
+                    "alertas",
+                    id
+                )
+            );
 
 
-}
+            await mostrarAlertas();
 
 
+        }
+
+        catch(error){
+
+
+            console.error(
+                "Error al eliminar:",
+                error
+            );
+
+
+            alert(
+                "No se pudo eliminar la alerta."
+            );
+
+        }
+
+    }
+
+};
 
 
 </script>
 
 </body>
+
 </html>
 
