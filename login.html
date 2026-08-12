@@ -356,18 +356,46 @@ dispositivo:"PXQ001"
 
 );
 
+alert(
+    "✅ Cuenta creada correctamente. Ahora inicia sesión."
+);
 
 
+/* LIMPIAR FORMULARIO */
 
-alert("✅ Cuenta creada correctamente. Ahora puedes iniciar sesión.");
+document
+    .getElementById("nombre")
+    .value = "";
+
+document
+    .getElementById("nino")
+    .value = "";
+
+document
+    .getElementById("correoRegistro")
+    .value = "";
+
+document
+    .getElementById("passwordRegistro")
+    .value = "";
 
 
-// limpiar formulario
+/* VOLVER A LA PANTALLA DE INICIO DE SESIÓN */
 
-document.getElementById("nombre").value="";
-document.getElementById("nino").value="";
-document.getElementById("correoRegistro").value="";
-document.getElementById("passwordRegistro").value="";
+mostrarLogin();
+
+
+/* LIMPIAR LOS CAMPOS DEL LOGIN */
+
+document
+    .getElementById("correoLogin")
+    .value = "";
+
+document
+    .getElementById("passwordLogin")
+    .value = "";
+
+
 
 
 // esperar para cambiar a login
