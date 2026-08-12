@@ -159,14 +159,6 @@ header h1{
     background:#25633d;
 }
 
-.boton-inicio{
-    background:#26758c !important;
-}
-
-.boton-inicio:hover{
-    background:#155263 !important;
-}
-
 </style>
 
 </head>
@@ -245,7 +237,7 @@ id="hora"
     No hay alertas registradas.
 </p>
 
-<!-- BOTONES -->
+<!-- BOTÓN REGRESAR -->
 
 <div class="botones">
 
@@ -253,23 +245,12 @@ id="hora"
     ⬅ Regresar al panel
 </a>
 
-<a
-href="index.html"
-class="boton-inicio"
-
->
-
-```
-🏠 Ir al inicio
-```
-
-</a>
-
 </div>
 
 </div>
 
 <script type="module">
+
 
 import { auth, db }
 from "./js/firebase-config.js";
@@ -292,20 +273,39 @@ from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 
 let usuarioActual = null;
+
 let rutaAlertas = null;
 
 
-/* =========================
+/* ========================================
    COMPROBAR SESIÓN
-========================= */
+======================================== */
+
 
 onAuthStateChanged(auth, async (usuario) => {
 
+
+    console.log(
+        "REGISTRO - Usuario Firebase:",
+        usuario
+    );
+
+
     if (!usuario) {
 
-        console.log("No hay sesión activa.");
 
-        window.location.href = "login.html";
+        console.log(
+            "REGISTRO - Firebase todavía no detecta la sesión."
+        );
+
+
+        /*
+            IMPORTANTE:
+            No mandamos al login.
+            Dejamos la página abierta para comprobar
+            qué está ocurriendo con Firebase.
+        */
+
 
         return;
 
@@ -313,7 +313,7 @@ onAuthStateChanged(auth, async (usuario) => {
 
 
     console.log(
-        "Usuario conectado:",
+        "REGISTRO - Sesión correcta:",
         usuario.uid
     );
 
@@ -331,20 +331,26 @@ onAuthStateChanged(auth, async (usuario) => {
 
     await mostrarAlertas();
 
+
 });
 
 
-/* =========================
+
+/* ========================================
    GUARDAR ALERTA
-========================= */
+======================================== */
+
 
 window.guardarAlerta = async function(){
 
+
     if (!rutaAlertas) {
+
 
         alert(
             "Espera un momento mientras se conecta la cuenta."
         );
+
 
         return;
 
@@ -352,37 +358,49 @@ window.guardarAlerta = async function(){
 
 
     const nombre =
-        document.getElementById("nombre").value.trim();
+        document.getElementById(
+            "nombre"
+        ).value.trim();
 
 
     const fecha =
-        document.getElementById("fecha").value;
+        document.getElementById(
+            "fecha"
+        ).value;
 
 
     const hora =
-        document.getElementById("hora").value;
+        document.getElementById(
+            "hora"
+        ).value;
 
 
     const observacion =
-        document.getElementById("observacion").value.trim();
+        document.getElementById(
+            "observacion"
+        ).value.trim();
 
 
-    if (
+
+    if(
         nombre === "" ||
         fecha === "" ||
         hora === ""
     ){
 
+
         alert(
             "Completa nombre, fecha y hora."
         );
+
 
         return;
 
     }
 
 
-    try {
+    try{
+
 
         await addDoc(
             rutaAlertas,
@@ -407,13 +425,24 @@ window.guardarAlerta = async function(){
         );
 
 
-        document.getElementById("nombre").value = "";
+        document.getElementById(
+            "nombre"
+        ).value = "";
 
-        document.getElementById("fecha").value = "";
 
-        document.getElementById("hora").value = "";
+        document.getElementById(
+            "fecha"
+        ).value = "";
 
-        document.getElementById("observacion").value = "";
+
+        document.getElementById(
+            "hora"
+        ).value = "";
+
+
+        document.getElementById(
+            "observacion"
+        ).value = "";
 
 
         await mostrarAlertas();
@@ -421,7 +450,9 @@ window.guardarAlerta = async function(){
 
     }
 
+
     catch(error){
+
 
         console.error(
             "Error al guardar alerta:",
@@ -433,18 +464,23 @@ window.guardarAlerta = async function(){
             "No se pudo guardar la alerta. Revisa la conexión con Firebase."
         );
 
+
     }
+
 
 };
 
 
-/* =========================
+
+/* ========================================
    MOSTRAR ALERTAS
-========================= */
+======================================== */
+
 
 async function mostrarAlertas(){
 
-    if (!rutaAlertas) {
+
+    if(!rutaAlertas){
 
         return;
 
@@ -466,7 +502,8 @@ async function mostrarAlertas(){
     lista.innerHTML = "";
 
 
-    try {
+    try{
+
 
         const datos =
             await getDocs(
@@ -474,7 +511,8 @@ async function mostrarAlertas(){
             );
 
 
-        if (datos.empty) {
+        if(datos.empty){
+
 
             mensaje.style.display =
                 "block";
@@ -499,6 +537,7 @@ async function mostrarAlertas(){
 
         datos.forEach(
             (elemento) => {
+
 
                 const alerta =
                     elemento.data();
@@ -555,18 +594,22 @@ async function mostrarAlertas(){
                     tarjeta
                 );
 
+
             }
         );
 
 
         document.getElementById(
             "contador"
-        ).textContent = contador;
+        ).textContent =
+            contador;
 
 
     }
 
+
     catch(error){
+
 
         console.error(
             "Error al cargar alertas:",
@@ -581,24 +624,31 @@ async function mostrarAlertas(){
         mensaje.style.display =
             "block";
 
+
     }
 
-}
+
+};
 
 
-/* =========================
+
+/* ========================================
    ELIMINAR ALERTA
-========================= */
+======================================== */
+
 
 window.eliminarAlerta = async function(id){
 
-    if (
+
+    if(
         confirm(
             "¿Deseas eliminar esta alerta?"
         )
     ){
 
-        try {
+
+        try{
+
 
             await deleteDoc(
                 doc(
@@ -616,7 +666,9 @@ window.eliminarAlerta = async function(id){
 
         }
 
+
         catch(error){
+
 
             console.error(
                 "Error al eliminar:",
@@ -628,11 +680,15 @@ window.eliminarAlerta = async function(id){
                 "No se pudo eliminar la alerta."
             );
 
+
         }
+
 
     }
 
+
 };
+
 
 </script>
 
