@@ -1,562 +1,306 @@
 <!DOCTYPE html>
 
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de alertas - PIXQUI</title>
 
-<title>PIXQUI Login</title>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    background:#eef8ee;
+    color:#333;
+}
 
-<script src="https://cdn.tailwindcss.com"></script>
+header{
+    background:#3b8c5a;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+header h1{
+    margin:0;
+}
+
+.contenedor{
+    width:85%;
+    margin:30px auto;
+}
+
+.contador{
+    background:#3b8c5a;
+    color:white;
+    width:300px;
+    margin:20px auto;
+    text-align:center;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 4px 10px gray;
+}
+
+.contador h2{
+    font-size:45px;
+    margin:10px 0;
+}
+
+.formulario{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 4px 10px gray;
+    margin-bottom:30px;
+}
+
+.formulario h2{
+    color:#25633d;
+    margin-top:0;
+}
+
+.formulario input,
+.formulario textarea{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #aaa;
+    box-sizing:border-box;
+    font-size:15px;
+}
+
+.formulario textarea{
+    height:80px;
+}
+
+.formulario button{
+    background:#3b8c5a;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.formulario button:hover{
+    background:#25633d;
+}
+
+.lista{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:20px;
+    margin-top:20px;
+}
+
+.alerta{
+    background:#d8f3dc;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 4px 8px gray;
+}
+
+.alerta h3{
+    margin-top:0;
+    color:#25633d;
+}
+
+.alerta p{
+    margin:8px 0;
+}
+
+.alerta button{
+    background:#c0392b;
+    color:white;
+    border:none;
+    padding:8px 15px;
+    border-radius:6px;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+.alerta button:hover{
+    background:#962d22;
+}
+
+.vacio{
+    text-align:center;
+    color:#666;
+    font-style:italic;
+    margin-top:20px;
+}
+
+.botones{
+    text-align:center;
+    margin-top:30px;
+}
+
+.botones a{
+    display:inline-block;
+    margin:10px;
+    padding:12px 25px;
+    background:#3b8c5a;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+}
+
+.botones a:hover{
+    background:#25633d;
+}
+</style>
 
 </head>
 
-<body class="bg-[#F6EFD9]">
+<body>
 
-<!-- NAVBAR -->
+<header>
+    <h1>Registro de alertas</h1>
+</header>
 
-<nav class="border-b border-[#E8DDB8]">
+<div class="contenedor">
 
-<div class="max-w-6xl mx-auto p-5 flex items-center gap-3">
+```
+<div class="contador">
+    <p>Alertas este mes</p>
+    <h2 id="contador">0</h2>
+    <p>eventos registrados</p>
+</div>
 
-<img
-src="./imagenes/Logo.jpg"
-alt="Logo PIXQUI"
-class="w-14 h-14 rounded-full"
+<div class="formulario">
+    <h2>Nueva alerta</h2>
 
->
+    <input type="text" id="nombre" placeholder="Nombre del niño">
 
-<h1 class="text-3xl font-bold">
-PIXQUI
-</h1>
+    <input type="date" id="fecha">
+
+    <input type="time" id="hora">
+
+    <textarea id="observacion" placeholder="Observación"></textarea>
+
+    <button onclick="guardarAlerta()">Guardar alerta</button>
+</div>
+
+<h2>Historial de alertas</h2>
+
+<div id="listaAlertas" class="lista"></div>
+
+<p id="mensajeVacio" class="vacio">No hay alertas registradas.</p>
+
+<div class="botones">
+    <a href="panel.html">⬅ Regresar al panel</a>
+</div>
+```
 
 </div>
 
-</nav>
+<script>
+// Verificar que haya sesión iniciada
+const madre = localStorage.getItem('madre');
 
-<!-- CONTENIDO -->
-
-<section class="py-12 px-5">
-
-<div class="bg-white max-w-md mx-auto rounded-2xl shadow-lg p-8">
-
-<h1 class="text-center text-4xl font-bold text-[#26758c]">
-PIXQUI
-</h1>
-
-<p
-    id="titulo"
-    class="text-center text-gray-600 mt-2 mb-8"
->
-Iniciar sesión
-</p>
-
-<!-- =========================
-     INICIAR SESIÓN
-========================= -->
-
-<div id="login">
-
-<input
-id="correoLogin"
-type="email"
-placeholder="Correo electrónico"
-class="w-full p-3 border rounded-lg mb-4"
-
->
-
-<div class="relative">
-
-<input
-id="passwordLogin"
-type="password"
-placeholder="Contraseña"
-class="w-full p-3 border rounded-lg"
-
->
-
-<button
-onclick="verPassword('passwordLogin')"
-class="absolute right-3 top-3"
-
->
-
-👁️ </button>
-
-</div>
-
-<button
-onclick="iniciarSesion()"
-class="mt-6 w-full bg-[#26758c] text-white py-3 rounded-full hover:bg-[#155263]"
-
->
-
-Iniciar sesión </button>
-
-<p class="mt-5 text-center">
-
-¿No tienes cuenta?
-
-<button
-onclick="mostrarRegistro()"
-class="text-[#26758c] font-bold"
-
->
-
-Regístrate </button>
-
-</p>
-
-<!-- IR AL INICIO -->
-
-<a
-href="index.html"
-class="block text-center mt-5 text-[#26758c] font-bold"
-
->
-
-🏠 Ir al inicio </a>
-
-</div>
-
-<!-- =========================
-     CREAR CUENTA
-========================= -->
-
-<div
-    id="registro"
-    class="hidden"
->
-
-<input
-id="nombre"
-placeholder="Nombre del cuidador"
-class="w-full p-3 border rounded-lg mb-3"
-
->
-
-<input
-id="nino"
-placeholder="Nombre del niño"
-class="w-full p-3 border rounded-lg mb-3"
-
->
-
-<input
-id="correoRegistro"
-type="email"
-placeholder="Correo electrónico"
-class="w-full p-3 border rounded-lg mb-3"
-
->
-
-<div class="relative">
-
-<input
-id="passwordRegistro"
-type="password"
-placeholder="Contraseña"
-class="w-full p-3 border rounded-lg"
-
->
-
-<button
-onclick="verPassword('passwordRegistro')"
-class="absolute right-3 top-3"
-
->
-
-👁️ </button>
-
-</div>
-
-<button
-onclick="registrarse()"
-class="mt-6 w-full bg-[#26758c] text-white py-3 rounded-full hover:bg-[#155263]"
-
->
-
-Crear cuenta </button>
-
-<p class="mt-5 text-center">
-
-¿Ya tienes cuenta?
-
-<button
-onclick="mostrarLogin()"
-class="text-[#26758c] font-bold"
-
->
-
-Ingresar </button>
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-<script type="module">
-
-
-/* =========================
-   FIREBASE
-========================= */
-
-import { auth, db }
-from "./js/firebase-config.js";
-
-
-import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword
+if(!madre){
+    window.location.href = 'login.html';
 }
-from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
+// Cada madre tiene su propia lista de alertas
+const claveAlertas = 'alertas_' + madre;
 
-import {
-    doc,
-    setDoc
-}
-from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+// Mostrar alertas al abrir la página
+mostrarAlertas();
 
+function guardarAlerta(){
 
-console.log("Firebase conectado correctamente");
+    const nombre = document.getElementById('nombre').value.trim();
+    const fecha = document.getElementById('fecha').value;
+    const hora = document.getElementById('hora').value;
+    const observacion = document.getElementById('observacion').value.trim();
 
-
-/* =========================
-   MOSTRAR REGISTRO
-========================= */
-
-window.mostrarRegistro = function(){
-
-    document
-        .getElementById("login")
-        .classList
-        .add("hidden");
-
-
-    document
-        .getElementById("registro")
-        .classList
-        .remove("hidden");
-
-
-    document
-        .getElementById("titulo")
-        .textContent = "Crear cuenta";
-
-};
-
-
-/* =========================
-   MOSTRAR LOGIN
-========================= */
-
-window.mostrarLogin = function(){
-
-    document
-        .getElementById("registro")
-        .classList
-        .add("hidden");
-
-
-    document
-        .getElementById("login")
-        .classList
-        .remove("hidden");
-
-
-    document
-        .getElementById("titulo")
-        .textContent = "Iniciar sesión";
-
-};
-
-
-/* =========================
-   MOSTRAR / OCULTAR
-   CONTRASEÑA
-========================= */
-
-window.verPassword = function(id){
-
-    const campo =
-        document.getElementById(id);
-
-
-    if(campo.type === "password"){
-
-        campo.type = "text";
-
-    }else{
-
-        campo.type = "password";
-
-    }
-
-};
-
-
-/* =========================
-   CREAR CUENTA
-========================= */
-
-window.registrarse = async function(){
-
-
-    const nombre =
-        document
-        .getElementById("nombre")
-        .value
-        .trim();
-
-
-    const nino =
-        document
-        .getElementById("nino")
-        .value
-        .trim();
-
-
-    const email =
-        document
-        .getElementById("correoRegistro")
-        .value
-        .trim();
-
-
-    const password =
-        document
-        .getElementById("passwordRegistro")
-        .value;
-
-
-    /* COMPROBAR CAMPOS */
-
-    if(
-        nombre === "" ||
-        nino === "" ||
-        email === "" ||
-        password === ""
-    ){
-
-        alert("Completa todos los campos.");
-
+    if(nombre === '' || fecha === '' || hora === ''){
+        alert('Completa nombre, fecha y hora.');
         return;
-
     }
 
+    const alerta = {
+        nombre,
+        fecha,
+        hora,
+        observacion
+    };
 
-    try{
+    let alertas = JSON.parse(localStorage.getItem(claveAlertas)) || [];
+    alertas.push(alerta);
 
+    localStorage.setItem(claveAlertas, JSON.stringify(alertas));
 
-        /* CREAR USUARIO EN FIREBASE */
+    document.getElementById('nombre').value = '';
+    document.getElementById('fecha').value = '';
+    document.getElementById('hora').value = '';
+    document.getElementById('observacion').value = '';
 
-        const usuario =
-            await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+    mostrarAlertas();
+}
 
+function mostrarAlertas(){
 
-        console.log(
-            "Usuario creado:",
-            usuario.user.uid
-        );
+    const lista = document.getElementById('listaAlertas');
+    const mensaje = document.getElementById('mensajeVacio');
 
+    let alertas = JSON.parse(localStorage.getItem(claveAlertas)) || [];
 
-        /* GUARDAR DATOS EN FIRESTORE */
+    lista.innerHTML = '';
 
-        await setDoc(
-            doc(
-                db,
-                "usuarios",
-                usuario.user.uid
-            ),
-            {
+    const hoy = new Date();
+    const mesActual = hoy.getMonth() + 1;
+    const anioActual = hoy.getFullYear();
 
-                nombre: nombre,
+    let contadorMensual = 0;
 
-                nino: nino,
-
-                correo: email,
-
-                dispositivo: "PXQ001"
-
-            }
-        );
-
-
-        /*
-           IMPORTANTE:
-
-           Después de crear la cuenta
-           NO vamos al panel.
-
-           Primero volvemos a INICIAR SESIÓN.
-        */
-
-
-        alert(
-            "✅ Cuenta creada correctamente. Ahora inicia sesión."
-        );
-
-
-        /* LIMPIAR FORMULARIO */
-
-        document
-            .getElementById("nombre")
-            .value = "";
-
-
-        document
-            .getElementById("nino")
-            .value = "";
-
-
-        document
-            .getElementById("correoRegistro")
-            .value = "";
-
-
-        document
-            .getElementById("passwordRegistro")
-            .value = "";
-
-
-        /* VOLVER A LOGIN */
-
-        mostrarLogin();
-
-
+    if(alertas.length === 0){
+        mensaje.style.display = 'block';
+    }else{
+        mensaje.style.display = 'none';
     }
 
+    alertas.forEach((alerta, index) => {
 
-    catch(error){
+        const partes = alerta.fecha.split('-');
+        const anio = parseInt(partes[0]);
+        const mes = parseInt(partes[1]);
 
-
-        console.error(
-            "Error al crear cuenta:",
-            error
-        );
-
-
-        if(
-            error.code ===
-            "auth/email-already-in-use"
-        ){
-
-            alert(
-                "Este correo ya tiene una cuenta. Inicia sesión."
-            );
-
-            mostrarLogin();
-
-
-        }else{
-
-            alert(
-                error.message
-            );
-
+        if(mes === mesActual && anio === anioActual){
+            contadorMensual++;
         }
 
+        const tarjeta = document.createElement('div');
+        tarjeta.className = 'alerta';
+
+        tarjeta.innerHTML = `
+            <h3>${alerta.fecha}</h3>
+            <p><strong>Niño:</strong> ${alerta.nombre}</p>
+            <p><strong>Hora:</strong> ${alerta.hora}</p>
+            <p>${alerta.observacion}</p>
+            <button onclick="eliminarAlerta(${index})">Eliminar</button>
+        `;
+
+        lista.appendChild(tarjeta);
+
+    });
+
+    document.getElementById('contador').textContent = contadorMensual;
+}
+
+function eliminarAlerta(index){
+
+    if(confirm('¿Deseas eliminar esta alerta?')){
+        let alertas = JSON.parse(localStorage.getItem(claveAlertas)) || [];
+        alertas.splice(index,1);
+        localStorage.setItem(claveAlertas, JSON.stringify(alertas));
+        mostrarAlertas();
     }
-
-};
-
-
-/* =========================
-   INICIAR SESIÓN
-========================= */
-
-window.iniciarSesion = async function(){
-
-
-    const email =
-        document
-        .getElementById("correoLogin")
-        .value
-        .trim();
-
-
-    const password =
-        document
-        .getElementById("passwordLogin")
-        .value;
-
-
-    if(
-        email === "" ||
-        password === ""
-    ){
-
-        alert(
-            "Completa correo y contraseña."
-        );
-
-        return;
-
-    }
-
-
-    try{
-
-
-        const resultado =
-            await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
-
-
-        /* GUARDAR UID */
-
-        localStorage.setItem(
-            "usuario",
-            resultado.user.uid
-        );
-
-
-        /*
-           SOLO DESPUÉS DE INICIAR SESIÓN
-           vamos al panel.
-        */
-
-        window.location.href =
-            "panel.html";
-
-
-    }
-
-
-    catch(error){
-
-
-        console.error(
-            "Error al iniciar sesión:",
-            error
-        );
-
-
-        alert(
-            "Correo o contraseña incorrectos."
-        );
-
-    }
-
-};
-
-
+}
 </script>
 
 </body>
-
 </html>
