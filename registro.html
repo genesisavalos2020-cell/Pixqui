@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PIXQUI Registro</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#F6EFD9]">
+<nav class="border-b border-[#E8DDB8]">
+<div class="max-w-6xl mx-auto p-5 flex items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<img src="./imagenes/Logo.jpg" class="w-14 h-14 rounded-full">
+<h1 class="text-3xl font-bold">PIXQUI</h1>
+</div>
+<a href="index.html" class="text-[#26758c] font-medium hover:text-[#8EC5FC]">Inicio</a>
+</div>
+</nav>
+<section class="py-12 px-5">
+<div class="bg-white max-w-md mx-auto rounded-2xl shadow-lg p-8">
+<h1 class="text-center text-4xl font-bold text-[#26758c]">PIXQUI</h1>
+<p id="titulo" class="text-center text-gray-600 mt-2 mb-8">Iniciar sesión</p>
+
+<!-- LOGIN -->
+<div id="login">
+<input id="correoLogin" type="email" placeholder="Correo electrónico" class="w-full p-3 border rounded-lg mb-4">
+<div class="relative">
+<input id="passwordLogin" type="password" placeholder="Contraseña" class="w-full p-3 border rounded-lg">
+<button onclick="verPassword('passwordLogin')" class="absolute right-3 top-3">👁️</button>
+</div>
+<button onclick="iniciarSesion()" class="mt-6 w-full bg-[#26758c] text-white py-3 rounded-full">
+Iniciar sesión
+</button>
+<p class="mt-5 text-center">
+¿No tienes cuenta?
+<button onclick="mostrarRegistro()" class="text-[#26758c] font-bold">Regístrate</button>
+</p>
+</div>
+
+<!-- REGISTRO -->
+<div id="registro" class="hidden">
+<input id="nombre" placeholder="Nombre del cuidador" class="w-full p-3 border rounded-lg mb-3">
+<input id="nino" placeholder="Nombre del niño" class="w-full p-3 border rounded-lg mb-3">
+<input id="correoRegistro" type="email" placeholder="Correo electrónico" class="w-full p-3 border rounded-lg mb-3">
+<div class="relative">
+<input id="passwordRegistro" type="password" placeholder="Contraseña" class="w-full p-3 border rounded-lg">
+<button onclick="verPassword('passwordRegistro')" class="absolute right-3 top-3">👁️</button>
+</div>
+<button onclick="registrarse()" class="mt-6 w-full bg-[#26758c] text-white py-3 rounded-full">
+Crear cuenta
+</button>
+<p class="mt-5 text-center">
+¿Ya tienes cuenta?
+<button onclick="mostrarLogin()" class="text-[#26758c] font-bold">Ingresar</button>
+</p>
+</div>
+
+</div>
+</section>
+
+<script type="module">
+import { auth, db } from "./js/firebase-config.js";
+console.log("Firebase conectado correctamente");
+
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+import {
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+
+// CAMBIAR A REGISTRO
+window.mostrarRegistro = function () {
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("registro").classList.remove("hidden");
+  document.getElementById("titulo").textContent = "Crear cuenta";
+};
+
+// CAMBIAR A LOGIN
+window.mostrarLogin = function () {
+  document.getElementById("registro").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
+  document.getElementById("titulo").textContent = "Iniciar sesión";
+};
+
+// MOSTRAR / OCULTAR CONTRASEÑA
+window.verPassword = function (id) {
+  const campo = document.getElementById(id);
+  if (campo.type === "password") {
+    campo.type = "text";
+  } else {
+    campo.type = "password";
+  }
+};
+
+// REGISTRAR USUARIO
+window.registrarse = async function () {
+  const nombre = document.getElementById("nombre").value.trim();
+  const nino = document.getElementById("nino").value.trim();
+  const email = document.getElementById("correoRegistro").value.trim();
+  const password = document.getElementById("passwordRegistro").value;
+
+  if (nombre === "" || nino === "" || email === "" || password === "") {
+    alert("Completa todos los campos");
+    return;
+  }
+
+  try {
+    const usuario = await createUserWithEmailAndPassword(auth, email, password);
+    console.log("Usuario creado:", usuario.user.uid);
+
+    await setDoc(doc(db, "usuarios", usuario.user.uid), {
+      nombre: nombre,
+      nino: nino,
+      correo: email,
+      dispositivo: "PXQ001"
+    });
+
+    alert("✅ Cuenta creada correctamente. Ahora puedes iniciar sesión.");
+
+    // limpiar formulario
+    document.getElementById("nombre").value = "";
+    document.getElementById("nino").value = "";
+    document.getElementById("correoRegistro").value = "";
+    document.getElementById("passwordRegistro").value = "";
+
+    // esperar para cambiar a login
+    setTimeout(() => {
+      mostrarLogin();
+    }, 1000);
+
+  } catch (error) {
+    if (error.code === "auth/email-already-in-use") {
+      alert("Este correo ya tiene una cuenta. Inicia sesión.");
+    } else {
+      alert(error.message);
+    }
+  }
+};
+
+// INICIAR SESIÓN
+window.iniciarSesion = async function () {
+  const email = document.getElementById("correoLogin").value.trim();
+  const password = document.getElementById("passwordLogin").value;
+
+  if (email === "" || password === "") {
+    alert("Completa correo y contraseña");
+    return;
+  }
+
+  try {
+    const resultado = await signInWithEmailAndPassword(auth, email, password);
+    // Guardar usuario actual
+    localStorage.setItem("usuario", resultado.user.uid);
+    window.location.href = "panel.html";
+  } catch (error) {
+    alert("Correo o contraseña incorrectos");
+  }
+};
+</script>
+</body>
+</html>
