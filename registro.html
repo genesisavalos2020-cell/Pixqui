@@ -1,306 +1,165 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro de alertas - PIXQUI</title>
-
-<style>
-body{
-    font-family: Arial, sans-serif;
-    margin:0;
-    background:#eef8ee;
-    color:#333;
-}
-
-header{
-    background:#3b8c5a;
-    color:white;
-    text-align:center;
-    padding:20px;
-}
-
-header h1{
-    margin:0;
-}
-
-.contenedor{
-    width:85%;
-    margin:30px auto;
-}
-
-.contador{
-    background:#3b8c5a;
-    color:white;
-    width:300px;
-    margin:20px auto;
-    text-align:center;
-    padding:20px;
-    border-radius:20px;
-    box-shadow:0 4px 10px gray;
-}
-
-.contador h2{
-    font-size:45px;
-    margin:10px 0;
-}
-
-.formulario{
-    background:white;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 4px 10px gray;
-    margin-bottom:30px;
-}
-
-.formulario h2{
-    color:#25633d;
-    margin-top:0;
-}
-
-.formulario input,
-.formulario textarea{
-    width:100%;
-    padding:12px;
-    margin:10px 0;
-    border-radius:8px;
-    border:1px solid #aaa;
-    box-sizing:border-box;
-    font-size:15px;
-}
-
-.formulario textarea{
-    height:80px;
-}
-
-.formulario button{
-    background:#3b8c5a;
-    color:white;
-    border:none;
-    padding:12px 25px;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:16px;
-}
-
-.formulario button:hover{
-    background:#25633d;
-}
-
-.lista{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:20px;
-    margin-top:20px;
-}
-
-.alerta{
-    background:#d8f3dc;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 4px 8px gray;
-}
-
-.alerta h3{
-    margin-top:0;
-    color:#25633d;
-}
-
-.alerta p{
-    margin:8px 0;
-}
-
-.alerta button{
-    background:#c0392b;
-    color:white;
-    border:none;
-    padding:8px 15px;
-    border-radius:6px;
-    cursor:pointer;
-    margin-top:10px;
-}
-
-.alerta button:hover{
-    background:#962d22;
-}
-
-.vacio{
-    text-align:center;
-    color:#666;
-    font-style:italic;
-    margin-top:20px;
-}
-
-.botones{
-    text-align:center;
-    margin-top:30px;
-}
-
-.botones a{
-    display:inline-block;
-    margin:10px;
-    padding:12px 25px;
-    background:#3b8c5a;
-    color:white;
-    text-decoration:none;
-    border-radius:8px;
-}
-
-.botones a:hover{
-    background:#25633d;
-}
-</style>
-
+<title>PIXQUI Registro</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-[#F6EFD9]">
+<nav class="border-b border-[#E8DDB8]">
+<div class="max-w-6xl mx-auto p-5 flex items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<img src="./imagenes/Logo.jpg" class="w-14 h-14 rounded-full">
+<h1 class="text-3xl font-bold">PIXQUI</h1>
+</div>
+<a href="index.html" class="text-[#26758c] font-medium hover:text-[#8EC5FC]">Inicio</a>
+</div>
+</nav>
+<section class="py-12 px-5">
+<div class="bg-white max-w-md mx-auto rounded-2xl shadow-lg p-8">
+<h1 class="text-center text-4xl font-bold text-[#26758c]">PIXQUI</h1>
+<p id="titulo" class="text-center text-gray-600 mt-2 mb-8">Iniciar sesión</p>
 
-<body>
-
-<header>
-    <h1>Registro de alertas</h1>
-</header>
-
-<div class="contenedor">
-
-```
-<div class="contador">
-    <p>Alertas este mes</p>
-    <h2 id="contador">0</h2>
-    <p>eventos registrados</p>
+<!-- LOGIN -->
+<div id="login">
+<input id="correoLogin" type="email" placeholder="Correo electrónico" class="w-full p-3 border rounded-lg mb-4">
+<div class="relative">
+<input id="passwordLogin" type="password" placeholder="Contraseña" class="w-full p-3 border rounded-lg">
+<button onclick="verPassword('passwordLogin')" class="absolute right-3 top-3">👁️</button>
+</div>
+<button onclick="iniciarSesion()" class="mt-6 w-full bg-[#26758c] text-white py-3 rounded-full">
+Iniciar sesión
+</button>
+<p class="mt-5 text-center">
+¿No tienes cuenta?
+<button onclick="mostrarRegistro()" class="text-[#26758c] font-bold">Regístrate</button>
+</p>
 </div>
 
-<div class="formulario">
-    <h2>Nueva alerta</h2>
-
-    <input type="text" id="nombre" placeholder="Nombre del niño">
-
-    <input type="date" id="fecha">
-
-    <input type="time" id="hora">
-
-    <textarea id="observacion" placeholder="Observación"></textarea>
-
-    <button onclick="guardarAlerta()">Guardar alerta</button>
+<!-- REGISTRO -->
+<div id="registro" class="hidden">
+<input id="nombre" placeholder="Nombre del cuidador" class="w-full p-3 border rounded-lg mb-3">
+<input id="nino" placeholder="Nombre del niño" class="w-full p-3 border rounded-lg mb-3">
+<input id="correoRegistro" type="email" placeholder="Correo electrónico" class="w-full p-3 border rounded-lg mb-3">
+<div class="relative">
+<input id="passwordRegistro" type="password" placeholder="Contraseña" class="w-full p-3 border rounded-lg">
+<button onclick="verPassword('passwordRegistro')" class="absolute right-3 top-3">👁️</button>
+</div>
+<button onclick="registrarse()" class="mt-6 w-full bg-[#26758c] text-white py-3 rounded-full">
+Crear cuenta
+</button>
+<p class="mt-5 text-center">
+¿Ya tienes cuenta?
+<button onclick="mostrarLogin()" class="text-[#26758c] font-bold">Ingresar</button>
+</p>
 </div>
 
-<h2>Historial de alertas</h2>
-
-<div id="listaAlertas" class="lista"></div>
-
-<p id="mensajeVacio" class="vacio">No hay alertas registradas.</p>
-
-<div class="botones">
-    <a href="panel.html">⬅ Regresar al panel</a>
 </div>
-```
+</section>
 
-</div>
+<script type="module">
+import { auth, db } from "./js/firebase-config.js";
+console.log("Firebase conectado correctamente");
 
-<script>
-// Verificar que haya sesión iniciada
-const madre = localStorage.getItem('madre');
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
-if(!madre){
-    window.location.href = 'login.html';
-}
+import {
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
-// Cada madre tiene su propia lista de alertas
-const claveAlertas = 'alertas_' + madre;
+// CAMBIAR A REGISTRO
+window.mostrarRegistro = function () {
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("registro").classList.remove("hidden");
+  document.getElementById("titulo").textContent = "Crear cuenta";
+};
 
-// Mostrar alertas al abrir la página
-mostrarAlertas();
+// CAMBIAR A LOGIN
+window.mostrarLogin = function () {
+  document.getElementById("registro").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
+  document.getElementById("titulo").textContent = "Iniciar sesión";
+};
 
-function guardarAlerta(){
+// MOSTRAR / OCULTAR CONTRASEÑA
+window.verPassword = function (id) {
+  const campo = document.getElementById(id);
+  if (campo.type === "password") {
+    campo.type = "text";
+  } else {
+    campo.type = "password";
+  }
+};
 
-    const nombre = document.getElementById('nombre').value.trim();
-    const fecha = document.getElementById('fecha').value;
-    const hora = document.getElementById('hora').value;
-    const observacion = document.getElementById('observacion').value.trim();
+// REGISTRAR USUARIO
+window.registrarse = async function () {
+  const nombre = document.getElementById("nombre").value.trim();
+  const nino = document.getElementById("nino").value.trim();
+  const email = document.getElementById("correoRegistro").value.trim();
+  const password = document.getElementById("passwordRegistro").value;
 
-    if(nombre === '' || fecha === '' || hora === ''){
-        alert('Completa nombre, fecha y hora.');
-        return;
-    }
+  if (nombre === "" || nino === "" || email === "" || password === "") {
+    alert("Completa todos los campos");
+    return;
+  }
 
-    const alerta = {
-        nombre,
-        fecha,
-        hora,
-        observacion
-    };
+  try {
+    const usuario = await createUserWithEmailAndPassword(auth, email, password);
+    console.log("Usuario creado:", usuario.user.uid);
 
-    let alertas = JSON.parse(localStorage.getItem(claveAlertas)) || [];
-    alertas.push(alerta);
-
-    localStorage.setItem(claveAlertas, JSON.stringify(alertas));
-
-    document.getElementById('nombre').value = '';
-    document.getElementById('fecha').value = '';
-    document.getElementById('hora').value = '';
-    document.getElementById('observacion').value = '';
-
-    mostrarAlertas();
-}
-
-function mostrarAlertas(){
-
-    const lista = document.getElementById('listaAlertas');
-    const mensaje = document.getElementById('mensajeVacio');
-
-    let alertas = JSON.parse(localStorage.getItem(claveAlertas)) || [];
-
-    lista.innerHTML = '';
-
-    const hoy = new Date();
-    const mesActual = hoy.getMonth() + 1;
-    const anioActual = hoy.getFullYear();
-
-    let contadorMensual = 0;
-
-    if(alertas.length === 0){
-        mensaje.style.display = 'block';
-    }else{
-        mensaje.style.display = 'none';
-    }
-
-    alertas.forEach((alerta, index) => {
-
-        const partes = alerta.fecha.split('-');
-        const anio = parseInt(partes[0]);
-        const mes = parseInt(partes[1]);
-
-        if(mes === mesActual && anio === anioActual){
-            contadorMensual++;
-        }
-
-        const tarjeta = document.createElement('div');
-        tarjeta.className = 'alerta';
-
-        tarjeta.innerHTML = `
-            <h3>${alerta.fecha}</h3>
-            <p><strong>Niño:</strong> ${alerta.nombre}</p>
-            <p><strong>Hora:</strong> ${alerta.hora}</p>
-            <p>${alerta.observacion}</p>
-            <button onclick="eliminarAlerta(${index})">Eliminar</button>
-        `;
-
-        lista.appendChild(tarjeta);
-
+    await setDoc(doc(db, "usuarios", usuario.user.uid), {
+      nombre: nombre,
+      nino: nino,
+      correo: email,
+      dispositivo: "PXQ001"
     });
 
-    document.getElementById('contador').textContent = contadorMensual;
-}
+    alert("✅ Cuenta creada correctamente. Ahora puedes iniciar sesión.");
 
-function eliminarAlerta(index){
+    // limpiar formulario
+    document.getElementById("nombre").value = "";
+    document.getElementById("nino").value = "";
+    document.getElementById("correoRegistro").value = "";
+    document.getElementById("passwordRegistro").value = "";
 
-    if(confirm('¿Deseas eliminar esta alerta?')){
-        let alertas = JSON.parse(localStorage.getItem(claveAlertas)) || [];
-        alertas.splice(index,1);
-        localStorage.setItem(claveAlertas, JSON.stringify(alertas));
-        mostrarAlertas();
+    // esperar para cambiar a login
+    setTimeout(() => {
+      mostrarLogin();
+    }, 1000);
+
+  } catch (error) {
+    if (error.code === "auth/email-already-in-use") {
+      alert("Este correo ya tiene una cuenta. Inicia sesión.");
+    } else {
+      alert(error.message);
     }
-}
-</script>
+  }
+};
 
+// INICIAR SESIÓN
+window.iniciarSesion = async function () {
+  const email = document.getElementById("correoLogin").value.trim();
+  const password = document.getElementById("passwordLogin").value;
+
+  if (email === "" || password === "") {
+    alert("Completa correo y contraseña");
+    return;
+  }
+
+  try {
+    const resultado = await signInWithEmailAndPassword(auth, email, password);
+    // Guardar usuario actual
+    localStorage.setItem("usuario", resultado.user.uid);
+    window.location.href = "panel.html";
+  } catch (error) {
+    alert("Correo o contraseña incorrectos");
+  }
+};
+</script>
 </body>
 </html>
