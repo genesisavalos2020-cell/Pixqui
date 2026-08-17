@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de alertas - PIXQUI</title>
+<style>
+body{
+  font-family: Arial, sans-serif;
+  margin:0;
+  background:#eef8ee;
+  color:#333;
+}
+header{
+  background:#3b8c5a;
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+header h1{
+  margin:0;
+}
+.contenedor{
+  width:85%;
+  margin:30px auto;
+}
+.contador{
+  background:#3b8c5a;
+  color:white;
+  width:300px;
+  margin:20px auto;
+  text-align:center;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 4px 10px gray;
+}
+.contador h2{
+  font-size:45px;
+  margin:10px 0;
+}
+.formulario{
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 4px 10px gray;
+  margin-bottom:30px;
+}
+.formulario h2{
+  color:#25633d;
+  margin-top:0;
+}
+.formulario input,
+.formulario textarea{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:8px;
+  border:1px solid #aaa;
+  box-sizing:border-box;
+  font-size:15px;
+}
+.formulario textarea{
+  height:80px;
+}
+.formulario button{
+  background:#3b8c5a;
+  color:white;
+  border:none;
+  padding:12px 25px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:16px;
+}
+.formulario button:hover{
+  background:#25633d;
+}
+.lista{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+  margin-top:20px;
+}
+.alerta{
+  background:#d8f3dc;
+  padding:20px;
+  border-radius:15px;
+  box-shadow:0 4px 8px gray;
+}
+.alerta h3{
+  margin-top:0;
+  color:#25633d;
+}
+.alerta p{
+  margin:8px 0;
+}
+.alerta button{
+  background:#c0392b;
+  color:white;
+  border:none;
+  padding:8px 15px;
+  border-radius:6px;
+  cursor:pointer;
+  margin-top:10px;
+}
+.alerta button:hover{
+  background:#962d22;
+}
+.vacio{
+  text-align:center;
+  color:#666;
+  font-style:italic;
+  margin-top:20px;
+}
+.botones{
+  text-align:center;
+  margin-top:30px;
+}
+.botones a{
+  display:inline-block;
+  margin:10px;
+  padding:12px 25px;
+  background:#3b8c5a;
+  color:white;
+  text-decoration:none;
+  border-radius:8px;
+}
+.botones a:hover{
+  background:#25633d;
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Registro de alertas</h1>
+</header>
+<div class="contenedor">
+
+<div class="contador">
+<p>Alertas este mes</p>
+<h2 id="contador">0</h2>
+<p>eventos registrados</p>
+</div>
+
+<div class="formulario">
+<h2>Nueva alerta</h2>
+<input type="text" id="nombre" placeholder="Nombre del niño">
+<input type="date" id="fecha">
+<input type="time" id="hora">
+<textarea id="observacion" placeholder="Observación"></textarea>
+<button onclick="guardarAlerta()">Guardar alerta</button>
+</div>
+
+<h2>Historial de alertas</h2>
+<div id="listaAlertas" class="lista"></div>
+<p id="mensajeVacio" class="vacio">No hay alertas registradas.</p>
+
+<div class="botones">
+<a href="panel.html">⬅ Regresar al panel</a>
+</div>
+
+</div>
+
+<script type="module">
+import { auth } from "./js/firebase-config.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+let claveAlertas = null;
+
+// Verificar que haya sesión iniciada (misma sesión que usa el panel)
+onAuthStateChanged(auth, (usuario) => {
+  if (!usuario) {
+    window.location.href = "registro.html";
+    return;
+  }
+  claveAlertas = "alertas_" + usuario.uid;
+  mostrarAlertas();
+});
+
+window.guardarAlerta = function () {
+  if (!claveAlertas) return;
+
+  const nombre = document.getElementById("nombre").value.trim();
+  const fecha = document.getElementById("fecha").value;
+  const hora = document.getElementById("hora").value;
+  const observacion = document.getElementById("observacion").value.trim();
+
+  if (nombre === "" || fecha === "" || hora === "") {
+    alert("Completa nombre, fecha y hora.");
+    return;
+  }
+
+  const alerta = { nombre, fecha, hora, observacion };
+
+  let alertas = JSON.parse(localStorage.getItem(claveAlertas)) || [];
+  alertas.push(alerta);
+  localStorage.setItem(claveAlertas, JSON.stringify(alertas));
+
+  document.getElementById("nombre").value = "";
+  document.getElementById("fecha").value = "";
+  document.getElementById("hora").value = "";
+  document.getElementById("observacion").value = "";
+
+  mostrarAlertas();
+};
+
+function mostrarAlertas() {
+  const lista = document.getElementById("listaAlertas");
+  const mensaje = document.getElementById("mensajeVacio");
+  let alertas = JSON.parse(localStorage.getItem(claveAlertas)) || [];
+  lista.innerHTML = "";
+
+  const hoy = new Date();
+  const mesActual = hoy.getMonth() + 1;
+  const anioActual = hoy.getFullYear();
+  let contadorMensual = 0;
+
+  mensaje.style.display = alertas.length === 0 ? "block" : "none";
+
+  alertas.forEach((alerta, index) => {
+    const partes = alerta.fecha.split("-");
+    const anio = parseInt(partes[0]);
+    const mes = parseInt(partes[1]);
+
+    if (mes === mesActual && anio === anioActual) {
+      contadorMensual++;
+    }
+
+    const tarjeta = document.createElement("div");
+    tarjeta.className = "alerta";
+    tarjeta.innerHTML = `
+      <h3>${alerta.fecha}</h3>
+      <p><strong>Niño:</strong> ${alerta.nombre}</p>
+      <p><strong>Hora:</strong> ${alerta.hora}</p>
+      <p>${alerta.observacion}</p>
+      <button onclick="eliminarAlerta(${index})">Eliminar</button>
+    `;
+    lista.appendChild(tarjeta);
+  });
+
+  document.getElementById("contador").textContent = contadorMensual;
+}
+
+window.eliminarAlerta = function (index) {
+  if (confirm("¿Deseas eliminar esta alerta?")) {
+    let alertas = JSON.parse(localStorage.getItem(claveAlertas)) || [];
+    alertas.splice(index, 1);
+    localStorage.setItem(claveAlertas, JSON.stringify(alertas));
+    mostrarAlertas();
+  }
+};
+</script>
+</body>
+</html>
